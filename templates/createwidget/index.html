@@ -1,0 +1,224 @@
+{% extends 'createwidget/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+ {% load mptt_tags %}
+
+{% block custom-css %}
+    <link href="{% static 'css/jquery.bonsai.css' %}" rel="stylesheet" type="text/css">
+    {% comment %}    {#    css goes here#}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <style>
+        .list {
+            margin-left: 20px;
+        }
+    </style>{% endcomment %}
+{% endblock %}
+
+{% block content %}
+    <div class="container text-center mt-4">
+         <h2>jQuery Bonsai.js: A Tree Plugin</h2>
+
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="address-form">
+                        <form class="user" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    {{ p_form.name|as_crispy_field }}
+                                </div>
+                                <div class="col-sm-6">
+                                    {{ p_form.parent|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-user btn-block"> Post Address</button>
+
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+
+
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+        <br>
+            <br>
+            <br>
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-6">
+                <h2>Basic</h2>
+                <ul id="tea" class="demo1">
+
+
+                    {% recursetree properties %}
+                        <li>
+
+                            {{ node }}
+                            {% if not node.is_leaf_node %}
+                                <ul>
+                                    {{ children }}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endrecursetree %}
+
+
+
+                </ul>
+
+
+            </div>
+            <div class="col-lg-6">
+                <h2>With Checkbox</h2>
+                <ol id="auto-checkboxes" data-name="foo">
+
+                    {% recursetree properties %}
+
+                        <li class="expanded" data-value="{{ node.name }}">
+
+                            {{ node }}
+
+                            {% if not node.is_leaf_node %}
+
+                               <ul> {{ children }}</ul>
+                                {% endif %}
+
+                        </li>
+
+
+                    {% endrecursetree %}
+
+                </ol>
+
+
+               <button type="button" id="save_value_checkbox" class="btn btn-primary btn-user btn-block"> Data Checkbox</button>
+            </div>
+            <div class="col-lg-6">
+                <h2>With Radio Buttons</h2>
+                <ol id="auto-radio-buttons" data-name="foo">
+                    {% recursetree properties %}
+
+                        <li class="expanded" data-value="{{ node.name }}">
+
+                            {{ node }}
+
+                            {% if not node.is_leaf_node %}
+
+                               <ul> {{ children }}</ul>
+                                {% endif %}
+
+                        </li>
+
+
+                    {% endrecursetree %}
+                </ol>
+
+              <button type="button" id="save_value_radio_button" class="btn btn-primary btn-user btn-block"> Data Radio Button</button>
+
+            <br>
+            <br>
+            <br>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock content %}
+
+
+{% block custom-scripts %}
+
+    {#    js/scripts goes here#}
+
+
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+            crossorigin="anonymous"></script>
+    <script src="{% static 'js/jquery.qubit.js' %}"></script>
+    <script src="{% static 'js/jquery.json-list.js' %}"></script>
+    <script src="{% static 'js/jquery.bonsai.js' %}"></script>
+
+
+    <script>
+        $('.demo1').bonsai({
+            expandAll: true,
+        });
+        $('#auto-checkboxes').bonsai({
+            expandAll: true,
+            checkboxes: true, // depends on jquery.qubit plugin
+            createInputs: 'checkbox' // takes values from data-name and data-value, and data-name is inherited
+        });
+        $('#auto-radio-buttons').bonsai({
+            expandAll: true,
+            createInputs: 'radio'
+        });
+
+
+
+    </script>
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-36251023-1']);
+        _gaq.push(['_setDomainName', 'jqueryscript.net']);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+
+    <script>
+
+
+
+        $(function () {
+            $('#save_value_checkbox').click(function () {
+                var val = [];
+                $(':checkbox:checked').each(function (i) {
+                    val[i] = $(this).val();
+                });
+                console.log("Checkbox", val)
+
+            });
+        });
+
+
+
+         $(function () {
+            $('#save_value_radio_button').click(function () {
+                var val = [];
+                $(':radio:checked').each(function (i) {
+                    val[i] = $(this).val();
+                });
+                console.log("Radiobutton", val)
+
+            });
+        });
+
+    </script>
+
+
+{% endblock %}
