@@ -8,7 +8,7 @@ To get the project .......
 ##### Cloning the repository:
 
 ```bash
-https://github.com/OwinoLucas/nested_widget.git
+https://github.com/1007047/Django-MPTT-With-Checkbox-and-Radio-button.git
 ```
 
 ##### Navigate into the folder and install requirements
