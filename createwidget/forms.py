@@ -26,3 +26,12 @@ class PropertyForm(forms.ModelForm):
 #         css = {
 #             'all': 'style.css',
 #         }
+
+# class Addressform(RightsFormMixin,IndividualfieldsformMixin,StandardMixin):
+# class Addressform(forms.ModelForm):
+#
+#     class Meta:
+#
+#         model = Address
+#         fields = ["properties_link"]
+#         widgets = {"properties_link":yourmpttwidget()}

@@ -9,17 +9,28 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, Http404, HttpResponseNotAllowed
 from .forms import *
 from .models import *
-
+import json
 # Create your views here.
 
 
 def createRadio(request):
     properties = RadioProperties.objects.all()
+    addressList = Address.objects.all()
+    # print ("addressList",addressList)
+
+    checbox_input_list = []
+
+    if len(addressList) > 0:
+        obj = Address.objects.last()
+        checbox_input_list = json.loads(obj.checkbox_input)
+
+
+    # print ("checbox_input_list",checbox_input_list)
 
     # All insert When Radio entry empty
     if len(properties) == 0:
         obj = RadioProperties()
-        obj.name = "All"
+        obj.name = "Root"
         obj.save()
 
 
@@ -36,6 +47,7 @@ def createRadio(request):
             return redirect('createradio')
     else:
         p_form = PropertyForm()
+        # form = AddressForm()
 
 
 
@@ -43,5 +55,37 @@ def createRadio(request):
     context = {'properties': properties,
                'p_form': p_form,
                # 'form': form
+               'checbox_input_list': checbox_input_list
                }
     return render(request, 'createwidget/index.html', context)
+
+
+def saveData(request):
+    data = request.POST.get("data", {})
+    # print("json is ",data)
+
+
+    obj = Address()
+    obj.checkbox_input = data
+    # addresslist = Address.objects.all()
+
+    # if len(addresslist) == 0:
+    #     # obj = Address()
+    #     # obj.id = 1
+    #     # obj.checkbox_input = data
+    #
+    # else:
+    #
+    #     # obj = Address.objects.last
+    #     # obj.id = 1
+    #     # obj.checkbox_input = data
+
+
+    try:
+        obj.save()
+
+    except Exception as e:
+        print("e "+str(e))
+        return HttpResponse(status=500)
+
+    return HttpResponse(status=200)

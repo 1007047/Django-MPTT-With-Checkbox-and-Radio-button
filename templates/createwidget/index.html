@@ -52,21 +52,22 @@
 
     </style>
 
-     <style id="compiled-css" type="text/css">
-      .horizontal-scroll{
-    overflow-x: auto;
-}
-.vertical-scroll{
-    overflow-y: auto;
-}
+    <style id="compiled-css" type="text/css">
+        .horizontal-scroll {
+            overflow-x: auto;
+        }
 
-.top{
+        .vertical-scroll {
+            overflow-y: auto;
+        }
 
-    height: 500px;
-    width: 60%;
-}
+        .top {
 
-  </style>
+            height: 500px;
+            width: 60%;
+        }
+
+    </style>
 
 {% endblock %}
 
@@ -89,14 +90,18 @@
                                 </div>
                             </div>
 
+                            {#                            {% for field in form %}#}
+                            {#                                <div class="form-group ">#}
+                            {#                                    {{ form.properties_link|as_crispy_field }}#}
+                            {#                                </div>#}
+                            {#                            {% endfor %}#}
+
                             <button type="submit" class="btn btn-primary btn-user btn-block"> Post Address</button>
 
                         </form>
                     </div>
                 </div>
                 <div class="col-md-6">
-
-
                 </div>
             </div>
 
@@ -112,10 +117,7 @@
     <br>
 
     <div class="container">
-
         <div class="card box card-hover horizontal-scroll vertical-scroll top">
-
-
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-9">
@@ -161,8 +163,7 @@
 
                 <br>
 
-                <button type="button" id="save_value_checkbox" class="btn btn-primary btn-user btn-block"> Data
-                    Checkbox
+                <button type="button" id="save_value_checkbox" class="btn btn-primary btn-user btn-block"> Widget Save
                 </button>
 
 
@@ -199,15 +200,40 @@
 
     <script>
 
-        $('#auto-checkboxes').bonsai({
+        var checbox_input_list = {{ checbox_input_list| safe }};
+        {#console.log("checbox_input_list", checbox_input_list)#}
+        var obj = $('#auto-checkboxes').bonsai({
             expandAll: true,
+            {#addSelectAll:true,#}
             checkboxes: true, // depends on jquery.qubit plugin
-            createInputs: 'checkbox' // takes values from data-name and data-value, and data-name is inherited
+            createInputs: 'checkbox', // takes values from data-name and data-value, and data-name is inherited
         });
 
 
+        {% comment %}   for (var i in checbox_input_list){
+    $('input[type=checkbox][value='+checbox_input_list[i]+']').attr('checked', true);
+
+           }
+   {% endcomment %}
+
+        {% comment %}
+
+                  $.each(checbox_input_list, function (i, val) {
+
+                      $("input[value='" + val + "']").prop('checked', true);
+
+
+
+
+                  });{% endcomment %}
+
+        var bonsai = $('#auto-checkboxes').data('bonsai');
+        bonsai.setCheckedValues(checbox_input_list)
+
+        console.log("bonsai", bonsai)
+
     </script>
-    <script type="text/javascript">
+    {% comment %}  <script type="text/javascript">
 
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-36251023-1']);
@@ -223,18 +249,32 @@
             s.parentNode.insertBefore(ga, s);
         })();
 
-    </script>
+    </script>{% endcomment %}
 
     <script>
 
 
         $(function () {
             $('#save_value_checkbox').click(function () {
-                var val = [];
+                var dataSet = [];
                 $(':checkbox:checked').each(function (i) {
-                    val[i] = $(this).val();
+                    dataSet[i] = $(this).val();
                 });
-                console.log("Checkbox", val)
+                console.log("Checkbox result", dataSet)
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/datasave',
+                    data: {
+                        'data': JSON.stringify(dataSet, null, '  '),
+
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+
+                    success: function (response) {
+                        // window.location = "{{ request.get_full_path }}";
+                    }
+                });
 
             });
         });

@@ -16,3 +16,9 @@ class RadioProperties(MPTTModel):
 
     class MPTTMeta:
         order_insertion_by = ['name']
+
+
+class Address(models.Model):
+    id = models.AutoField(primary_key=True)
+    # properties_link = models.ManyToManyField(RadioProperties, blank=True, default=None )
+    checkbox_input = models.CharField(max_length=5000, null=False, blank=False)
