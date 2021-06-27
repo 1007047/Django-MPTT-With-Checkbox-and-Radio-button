@@ -79,6 +79,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="address-form">
+
+
                         <form class="user" method="POST">
                             {% csrf_token %}
                             <div class="form-group row">
@@ -89,19 +91,24 @@
                                     {{ p_form.parent|as_crispy_field }}
                                 </div>
                             </div>
-
-                            {#                            {% for field in form %}#}
-                            {#                                <div class="form-group ">#}
-                            {#                                    {{ form.properties_link|as_crispy_field }}#}
-                            {#                                </div>#}
-                            {#                            {% endfor %}#}
-
+                            {% comment %}   {% for field in form %}
+                        <div class="form-group ">
+                            {{ form.properties_link|as_crispy_field }}
+                        </div>
+                        {% endfor %}{% endcomment %}
                             <button type="submit" class="btn btn-primary btn-user btn-block"> Post Address</button>
 
                         </form>
+
                     </div>
                 </div>
                 <div class="col-md-6">
+
+                    {% for field in form %}
+                        <div class="form-group ">
+                            {{ form.properties_link|as_crispy_field }}
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
 
@@ -209,31 +216,13 @@
             createInputs: 'checkbox', // takes values from data-name and data-value, and data-name is inherited
         });
 
+        {#var bonsai = $('#auto-checkboxes').data('bonsai');#}
+        {#bonsai.setCheckedValues(checbox_input_list)#}
 
-        {% comment %}   for (var i in checbox_input_list){
-    $('input[type=checkbox][value='+checbox_input_list[i]+']').attr('checked', true);
-
-           }
-   {% endcomment %}
-
-        {% comment %}
-
-                  $.each(checbox_input_list, function (i, val) {
-
-                      $("input[value='" + val + "']").prop('checked', true);
-
-
-
-
-                  });{% endcomment %}
-
-        var bonsai = $('#auto-checkboxes').data('bonsai');
-        bonsai.setCheckedValues(checbox_input_list)
-
-        console.log("bonsai", bonsai)
+        {#console.log("bonsai", bonsai)#}
 
     </script>
-    {% comment %}  <script type="text/javascript">
+    {% comment %}   <script type="text/javascript">
 
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-36251023-1']);
@@ -249,8 +238,8 @@
             s.parentNode.insertBefore(ga, s);
         })();
 
-    </script>{% endcomment %}
-
+    </script>
+{% endcomment %}
     <script>
 
 
@@ -267,14 +256,18 @@
                     url: '/datasave',
                     data: {
                         'data': JSON.stringify(dataSet, null, '  '),
+                        {#'form': {{ f }},#}
 
                         csrfmiddlewaretoken: '{{ csrf_token }}'
                     },
 
                     success: function (response) {
                         // window.location = "{{ request.get_full_path }}";
+                        window.location.href = '{% url 'nestedwidget' %}'
+
                     }
                 });
+
 
             });
         });

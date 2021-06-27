@@ -37,7 +37,7 @@ def createRadio(request):
 
     if request.method == 'POST':
         p_form = PropertyForm(request.POST)
-        # form = AddressForm(request.POST)
+        # form = AddressForm2(request.POST)
         # if p_form.is_valid() and form.is_valid():
         if p_form.is_valid():
             p_form.save()
@@ -47,22 +47,52 @@ def createRadio(request):
             return redirect('createradio')
     else:
         p_form = PropertyForm()
-        # form = AddressForm()
-
-
+        form = Addressform2()
 
 
     context = {'properties': properties,
                'p_form': p_form,
-               # 'form': form
+               'form': form,
                'checbox_input_list': checbox_input_list
                }
     return render(request, 'createwidget/index.html', context)
 
+def nestedwidget(request):
+    properties = RadioProperties.objects.all()
+    addressList = Address.objects.all().order_by('-id')
 
+
+
+    checbox_input_list = list()
+    i = 0
+    for obj in addressList:
+
+        temp_dict = dict()
+        temp_dict[i] = json.loads(obj.checkbox_input)
+
+        checbox_input_list.append(temp_dict)
+        i += 1
+
+
+
+
+    p_form = PropertyForm()
+    form = Addressform2()
+
+
+    context = {'properties': properties,
+               'p_form': p_form,
+               'form': form,
+               'checbox_input_list': checbox_input_list
+               }
+    return render(request, 'createwidget/nestedwidget.html', context)
 def saveData(request):
     data = request.POST.get("data", {})
-    # print("json is ",data)
+    # print ("hello",request.POST.get('form'))
+
+    # form = Addressform2()
+    # if form.is_valid():
+    #     form.save()
 
 
     obj = Address()

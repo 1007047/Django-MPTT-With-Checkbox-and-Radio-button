@@ -1,0 +1,201 @@
+{% extends 'createwidget/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load mptt_tags %}
+
+{% block custom-css %}
+    <link href="{% static 'css/jquery.bonsai.css' %}" rel="stylesheet" type="text/css">
+
+
+    <style>
+
+        .boxes .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+
+        }
+
+        .boxes .container .card {
+            background-color: #ffffff;
+            border-radius: 4px;
+            flex: 1;
+            margin: 2%;
+            min-width: 200px;
+            min-height: 200px;
+            text-align: center;
+            align-items: center;
+            padding: 0;
+        }
+
+        .boxes .container .card .card-header {
+            width: 100%;
+        }
+
+        .boxes .container .card .card-content {
+            margin-top: 40px;
+        }
+
+        .boxes .container .card.box {
+            box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.16);
+        }
+
+        .scroll {
+            flex: 1;
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+
+
+    </style>
+
+    <style id="compiled-css" type="text/css">
+        .horizontal-scroll {
+            overflow-x: auto;
+        }
+
+        .vertical-scroll {
+            overflow-y: auto;
+        }
+
+        .top {
+
+            height: 500px;
+            width: 60%;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block content %}
+    {% for obj in checbox_input_list %}
+
+        <br>
+
+        <div class="container">
+            <div class="card box card-hover horizontal-scroll vertical-scroll top">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <h2>With Checkbox</h2>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <div class="card-content">
+
+
+                    <ol id="auto-checkboxes{{ forloop.counter0 }}" data-name="foo">
+
+                        {% recursetree properties %}
+
+                            <li class="expanded" data-value="{{ node.name }}">
+
+                                {{ node }}
+
+                                {% if not node.is_leaf_node %}
+
+                                    <ul> {{ children }}</ul>
+                                {% endif %}
+
+                            </li>
+
+
+                        {% endrecursetree %}
+
+                    </ol>
+
+                    <br>
+
+                    {#                <button type="button" id="save_value_checkbox" class="btn btn-primary btn-user btn-block"> Widget Save#}
+                    {#                </button>#}
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <br>
+
+    {% endfor %}
+{% endblock content %}
+
+
+{% block custom-scripts %}
+
+    {#    js/scripts goes here#}
+
+
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+            crossorigin="anonymous"></script>
+    <script src="{% static 'js/jquery.qubit.js' %}"></script>
+    <script src="{% static 'js/jquery.json-list.js' %}"></script>
+    <script src="{% static 'js/jquery.bonsai.js' %}"></script>
+
+
+    <script>
+
+        var checbox_input_list = {{ checbox_input_list| safe }};
+
+        {# console.log("checbox_input_list", checbox_input_list)#}
+
+        for (var i in checbox_input_list) {
+            console.log("i", i);
+
+            var obj = $('#auto-checkboxes' + i).bonsai({
+                expandAll: true,
+                {#addSelectAll:true,#}
+                checkboxes: true, // depends on jquery.qubit plugin
+                createInputs: 'checkbox', // takes values from data-name and data-value, and data-name is inherited
+            });
+
+            var bonsai = $('#auto-checkboxes' + i).data('bonsai');
+
+            {#console.log("bonsai", bonsai)#}
+            {#console.log("checbox_input_list[i]", checbox_input_list[i][i])#}
+
+            bonsai.setCheckedValues(checbox_input_list[i][i])
+
+        }
+
+
+    </script>
+    {% comment %}   <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-36251023-1']);
+        _gaq.push(['_setDomainName', 'jqueryscript.net']);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+{% endcomment %}
+    <script>
+
+
+    </script>
+
+
+
+
+{% endblock %}

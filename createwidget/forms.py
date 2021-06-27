@@ -35,3 +35,11 @@ class PropertyForm(forms.ModelForm):
 #         model = Address
 #         fields = ["properties_link"]
 #         widgets = {"properties_link":yourmpttwidget()}
+
+class Addressform2(forms.ModelForm):
+    # properties_link = Address2.properties_link
+    class Meta:
+
+        model = Address2
+        fields = ["properties_link"]
+        # widgets = {"properties_link":nestedwidget()}
