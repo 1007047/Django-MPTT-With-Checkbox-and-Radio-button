@@ -1,0 +1,7 @@
+
+
+{% if widget.wrap_label %}
+  <label{% if widget.attrs.id %} for="{{ widget.attrs.id }}"{% endif %}>{% endif %}
+  <input type="{{ widget.type }}" name="{{ widget.name }} class="nestedwidget" {% if widget.value != None %} value="{{ widget.value }}"
+{% endif %}>
+{% if widget.wrap_label %} {{ widget.label }}</label>{% endif %}

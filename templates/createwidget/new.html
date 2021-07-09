@@ -1,0 +1,18 @@
+{% load static %}
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+            crossorigin="anonymous"></script>
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+
+
+<form id="form" method="post" >
+            {% csrf_token %}
+
+{{form}}
+<button type="submit" id="submit">Save</button>
+
+
+
+        </form>

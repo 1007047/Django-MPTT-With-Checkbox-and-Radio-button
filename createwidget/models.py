@@ -7,7 +7,7 @@ from django.db.models.signals import post_save
 # from django.views.generic.detail import *
 from django.views.generic.detail import BaseDetailView
 
-class RadioProperties(MPTTModel):
+class Properties(MPTTModel):
     name = models.CharField(max_length=32)
     parent = TreeForeignKey('self', on_delete=models.CASCADE,
                             null=True, blank=True, related_name='children')
@@ -21,11 +21,7 @@ class RadioProperties(MPTTModel):
 
 class Address(models.Model):
     id = models.AutoField(primary_key=True)
-    # properties_link = models.ManyToManyField(RadioProperties, blank=True, default=None )
+    properties_link = models.ManyToManyField(Properties, blank=True, default=None )
     checkbox_input = models.CharField(max_length=5000, null=False, blank=False)
 
 
-
-# class Address2(LoggerModelMixin,Standard_Model_Mixin):
-class Address2(models.Model):
-    properties_link = models.ManyToManyField(RadioProperties, default=None )

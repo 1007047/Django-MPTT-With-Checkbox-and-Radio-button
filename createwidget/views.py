@@ -10,55 +10,35 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, Http40
 from .forms import *
 from .models import *
 import json
+from .models import *
 # Create your views here.
 
 
 def createRadio(request):
-    properties = RadioProperties.objects.all()
-    addressList = Address.objects.all()
-    # print ("addressList",addressList)
 
-    checbox_input_list = []
-
-    if len(addressList) > 0:
-        obj = Address.objects.last()
-        checbox_input_list = json.loads(obj.checkbox_input)
-
-
-    # print ("checbox_input_list",checbox_input_list)
-
-    # All insert When Radio entry empty
-    if len(properties) == 0:
-        obj = RadioProperties()
-        obj.name = "Root"
-        obj.save()
+    addressentry = get_object_or_404(Address, pk=1)
 
 
 
-    if request.method == 'POST':
-        p_form = PropertyForm(request.POST)
-        # form = AddressForm2(request.POST)
-        # if p_form.is_valid() and form.is_valid():
-        if p_form.is_valid():
-            p_form.save()
-            # form.save()
-            # message.success(
-            #     request, 'post created successfully!')
-            return redirect('createradio')
-    else:
-        p_form = PropertyForm()
-        form = Addressform2()
+    if request.method == "POST":
+        form = AddressForm(request.POST, instance=addressentry)
+        if form.is_valid():
 
+            form.save()
 
-    context = {'properties': properties,
-               'p_form': p_form,
+        else:
+            print(form.errors)
+
+    form = AddressForm(instance=addressentry)
+
+    context = {
                'form': form,
-               'checbox_input_list': checbox_input_list
+
                }
-    return render(request, 'createwidget/index.html', context)
+    return render(request, 'createwidget/new.html', context)
 
 def nestedwidget(request):
-    properties = RadioProperties.objects.all()
+    properties = Properties.objects.all()
     addressList = Address.objects.all().order_by('-id')
 
 
@@ -77,12 +57,12 @@ def nestedwidget(request):
 
 
     p_form = PropertyForm()
-    form = Addressform2()
+
 
 
     context = {'properties': properties,
                'p_form': p_form,
-               'form': form,
+
                'checbox_input_list': checbox_input_list
                }
     return render(request, 'createwidget/nestedwidget.html', context)

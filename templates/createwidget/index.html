@@ -72,64 +72,14 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container text-center mt-4">
-        <h2>jQuery Bonsai.js: A Tree Plugin</h2>
-
-        <div class="container text-center">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="address-form">
-
-
-                        <form class="user" method="POST">
-                            {% csrf_token %}
-                            <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    {{ p_form.name|as_crispy_field }}
-                                </div>
-                                <div class="col-sm-6">
-                                    {{ p_form.parent|as_crispy_field }}
-                                </div>
-                            </div>
-                            {% comment %}   {% for field in form %}
-                        <div class="form-group ">
-                            {{ form.properties_link|as_crispy_field }}
-                        </div>
-                        {% endfor %}{% endcomment %}
-                            <button type="submit" class="btn btn-primary btn-user btn-block"> Post Address</button>
-
-                        </form>
-
-                    </div>
-                </div>
-                <div class="col-md-6">
-
-                    {% for field in form %}
-                        <div class="form-group ">
-                            {{ form.properties_link|as_crispy_field }}
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-
-        </div>
-
-
-    </div>
-
-
-    <br>
-    <br>
-    <br>
 
     <div class="container">
+        <form id="form" method="post" >
+            {% csrf_token %}
         <div class="card box card-hover horizontal-scroll vertical-scroll top">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-9">
-                        <h2>With Checkbox</h2>
-                    </div>
+
                     <div class="col-md-3">
                         <form id="live-search" action="" class="styled" method="post">
                             <fieldset>
@@ -148,11 +98,14 @@
             <div class="card-content">
 
 
-                <ol id="auto-checkboxes" data-name="foo">
+
+
+
+                <ol id="auto-checkboxes" id="porperties" data-name="properties">
 
                     {% recursetree properties %}
 
-                        <li class="expanded" data-value="{{ node.name }}">
+                        <li class="expanded" data-value="{{ node.id }}">
 
                             {{ node }}
 
@@ -168,25 +121,21 @@
 
                 </ol>
 
+
+
                 <br>
 
-                <button type="button" id="save_value_checkbox" class="btn btn-primary btn-user btn-block"> Widget Save
-                </button>
+                <button type="submit" id="submit">Save</button>
 
 
             </div>
 
 
         </div>
-
+        </form>
     </div>
 
 
-
-
-    <br>
-    <br>
-    <br>
 
 {% endblock content %}
 
@@ -263,7 +212,7 @@
 
                     success: function (response) {
                         // window.location = "{{ request.get_full_path }}";
-                        window.location.href = '{% url 'nestedwidget' %}'
+                        window.location.href = '{% url 'createradio' %}'
 
                     }
                 });
@@ -302,7 +251,7 @@
 
                 // Update the count
                 var numberItems = count;
-                $("#filter-count").text("Number of Results = " + count);
+                //$("#filter-count").text("Number of Results = " + count);
             });
         });
         //# sourceURL=pen.js
